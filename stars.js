@@ -8,7 +8,7 @@
 		var star = document.createElementNS("http://www.w3.org/2000/svg", 'circle');
 
 		star.setAttribute("r", "1");
-		star.style.stroke = colors[rand(0, colors.length)];
+		star.style.stroke = colors[rand(0, colors.length - 1)];
 		star.style.strokeWidth = "1px";
 		star.style.opacity = rand(0, 100) / 100.0;
 
@@ -74,15 +74,16 @@
 
 	function makeWord(word) {
 		var group = document.createElementNS("http://www.w3.org/2000/svg", 'g');
+		group.classList.add('word')
 
 		for (var i = word.length - 1; i >= 0; i--) {
 			var letter = document.createElementNS("http://www.w3.org/2000/svg", 'path');
 
 			letter.setAttribute('d', letters[word[i]]);
-			letter.style.stroke = "#111";
+			letter.style.stroke = "#222";
 			letter.style.strokeWidth = "5";
 			letter.style.fill = "#111";
-			letter.style.opacity = "0.5";
+			letter.style.opacity = "1";
 
 			letter.setAttribute('transform', 'translate('+30*i+', 0) scale(1.25)')
 
@@ -93,17 +94,41 @@
 	}
 
 	function positionWord(group) {
-		group.setAttribute('transform', 'translate(100, 100) scale(2) rotate(45)');
+		var space = canvas.getBoundingClientRect();
+
+		var rotate = rand(0, 360);
+		var scale = rand(0, 4);
+		var x = rand(0, space.width);
+		var y = rand(0, space.height);
+
+		group.setAttribute('transform', 'translate('+x+', '+y+') scale('+scale+') rotate('+rotate+')');
+		group.style.opacity = "0.25";
+
 		canvas.appendChild(group);
+
+		return group;
 	}
+
+	var currentWord, lastWord;
+	var words = ['beauty', 'infinity', 'cosmos', 'love', 'life', 'connect', 'relax', 'float', 'enjoy', 'nature'];
+	setInterval(function(){
+		if (currentWord) { 
+			lastWord = currentWord;
+			lastWord.style.opacity = 0; 
+			setTimeout( function() { canvas.removeChild(lastWord); }, 1000 );
+		}
+
+		var text = words[rand(0, words.length - 1)];
+		currentWord = positionWord(makeWord(text));
+
+	}, 1000 * 2);
+
 
 	function makeStars(stars) {
 		for (var i = 0; i <= stars; i++) {
 			twinkleStar(positionStar(makeStar()));
 		}
 	}
-
-	positionWord(makeWord('hello world'));
 	makeStars(300)
 	document.addEventListener('click', function(){ makeStars(100); });
 })();
