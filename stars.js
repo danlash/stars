@@ -131,4 +131,5 @@
 	}
 	makeStars(300)
 	document.addEventListener('click', function(){ makeStars(100); });
+	document.addEventListener("touchstart", function() { makeStars(100); }, false);
 })();
