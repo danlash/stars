@@ -3,11 +3,12 @@
 
 	function rand(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min;	}
 
+	var colors = ['#fff', '#eee', '#ccf', '#fcc', '#fcf', '#ffa'];
 	function makeStar() {
 		var star = document.createElementNS("http://www.w3.org/2000/svg", 'circle');
 
 		star.setAttribute("r", "1");
-		star.style.stroke = "#fff";
+		star.style.stroke = colors[rand(0, colors.length)];
 		star.style.strokeWidth = "1px";
 		star.style.opacity = rand(0, 100) / 100.0;
 
@@ -41,7 +42,7 @@
 		return star;
 	}
 
-	var stars = 100;
+	var stars = 1000;
 	for (var i = 0; i <= stars; i++) {
 		twinkleStar(positionStar(makeStar()));
 	}
