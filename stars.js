@@ -10,4 +10,17 @@
 	star.style.strokeWidth = "1px";
 
 	canvas.appendChild(star);
+
+	var opacity = 1;
+	var brightening = false;
+	var step = 0.1;
+
+	setInterval(function(){
+		opacity = brightening ? opacity + step : opacity - step;
+		star.style.opacity = opacity;
+
+		if (opacity <= 0) { brightening = true; }
+		if (opacity >= 1) { brightening = false; }
+	}, 100);
+
 })();
