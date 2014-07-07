@@ -1,26 +1,49 @@
 (function(){
 	var canvas = document.getElementById('stars');
 
-	var star = document.createElementNS("http://www.w3.org/2000/svg", 'circle');
+	function rand(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min;	}
 
-	star.setAttribute("cy", "15");
-	star.setAttribute("cx", "15");
-	star.setAttribute("r", "1");
-	star.style.stroke = "#fff";
-	star.style.strokeWidth = "1px";
+	function makeStar() {
+		var star = document.createElementNS("http://www.w3.org/2000/svg", 'circle');
 
-	canvas.appendChild(star);
+		star.setAttribute("r", "1");
+		star.style.stroke = "#fff";
+		star.style.strokeWidth = "1px";
+		star.style.opacity = rand(0, 100) / 100.0;
 
-	var opacity = 1;
-	var brightening = false;
-	var step = 0.1;
+		return star;
+	}
 
-	setInterval(function(){
-		opacity = brightening ? opacity + step : opacity - step;
-		star.style.opacity = opacity;
+	function positionStar(star) {
+		var space = canvas.getBoundingClientRect();
 
-		if (opacity <= 0) { brightening = true; }
-		if (opacity >= 1) { brightening = false; }
-	}, 100);
+		star.setAttribute("cy", rand(0, space.height));
+		star.setAttribute("cx", rand(0, space.width));
+	
+		canvas.appendChild(star);
+
+		return star;
+	}
+
+	function twinkleStar(star) {
+		var opacity = 1;
+		var brightening = rand(0, 1) === 1;
+		var step = 0.1;
+
+		setInterval(function(){
+			opacity = brightening ? opacity + step : opacity - step;
+			star.style.opacity = opacity;
+
+			if (opacity <= 0) { brightening = true; }
+			if (opacity >= 1) { brightening = false; }
+		}, rand(100, 1000));
+
+		return star;
+	}
+
+	var stars = 100;
+	for (var i = 0; i <= stars; i++) {
+		twinkleStar(positionStar(makeStar()));
+	}
 
 })();
